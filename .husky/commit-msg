@@ -5,7 +5,7 @@ setlocal
 set "COMMIT_MSG_FILE=%~1"
 
 :: Run commitlint to validate the commit message
-npx --no-install commitlint --from :%~1 --verbose 2>&1 || (
+npx --no-install commitlint --edit "%COMMIT_MSG_FILE%" --verbose 2>&1 || (
     echo.
     echo " Commitlint validation failed!"
     echo "Commit message must follow Conventional Commits format:"
