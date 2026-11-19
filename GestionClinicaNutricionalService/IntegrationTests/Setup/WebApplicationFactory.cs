@@ -13,6 +13,10 @@ namespace IntegrationTests.Setup
 	{
 		private readonly string _dbName = $"IntTests_Item_{Guid.NewGuid()}";
 
+		private static string ConnectionString =>
+			Environment.GetEnvironmentVariable("TEST_DATABASE_CONNECTION")
+			?? "Server=localhost\\SQLEXPRESS;Database=ClinicaNutricional;MultipleActiveResultSets=True;Trusted_Connection=True;TrustServerCertificate=True";
+
 		protected override void ConfigureWebHost(Microsoft.AspNetCore.Hosting.IWebHostBuilder builder)
 		{
 			_ = builder.ConfigureServices(
@@ -39,8 +43,7 @@ namespace IntegrationTests.Setup
 					_ = services.RemoveAll<DbContextOptions<DatabaseContext>>();
 					_ = services.AddSingleton(
 						new DbContextOptionsBuilder<DatabaseContext>()
-							.UseSqlServer(
-								"Server=localhost\\SQLEXPRESS;Database=ClinicaNutricional;MultipleActiveResultSets=True;Trusted_Connection=True;TrustServerCertificate=True")
+							.UseSqlServer(ConnectionString)
 							.Options);
 				});
 		}
