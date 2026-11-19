@@ -1,0 +1,52 @@
+@echo off
+setlocal
+
+echo "=== Running code rules validation before commit ==="
+
+:: Get list of staged C# files
+for /f "tokens=*" %%f in ('git diff --cached --name-only -- "*.cs"') do (
+    set "STAGED_FILES=1"
+    exit /b 0
+)
+
+if not defined STAGED_FILES (
+    echo "No C# files staged for commit."
+    exit /b 0
+)
+
+echo "Found staged C# files. Running validation..."
+
+:: Check for async void anti-pattern
+for /f "tokens=*" %%f in ('git diff --cached --name-only -- "*.cs"') do (
+    echo "Checking: %%f"
+    findstr /i "async void" %%f >nul 2>&1 && (
+        echo "  [WARN] Potential async void pattern found in %%f"
+    )
+)
+
+:: Check for Convert.Parse without TryParse (basic check)
+for /f "tokens=*" %%f in ('git diff --cached --name-only -- "*.cs"') do (
+    findstr /i "Convert\.Parse" %%f >nul 2>&1 && (
+        echo "  [WARN] Consider using TryParse instead of Convert.Parse in %%f"
+    )
+)
+
+:: Check for monetary types using float/double in .cs files (basic pattern)
+for /f "tokens=*" %%f in ('git diff --cached --name-only -- "*.cs"') do (
+    findstr /i "float\|double" %%f >nul 2>&1 && (
+        echo "  [WARN] Consider using decimal for monetary values in %%f"
+    )
+)
+
+:: Check for hard-coded strings as property names (basic check for nameof usage)
+for /f "tokens=*" %%f in ('git diff --cached --name-only -- "*.cs"') do (
+    findstr /i "string\.IsNullOrEmpty" %%f >nul 2>&1 && (
+        echo "  [WARN] Consider using nameof() for string checks in %%f"
+    )
+)
+
+echo.
+echo "=== Validation complete ==="
+echo "If no warnings above, your commit can proceed."
+
+exit /b 0
