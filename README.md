@@ -103,6 +103,18 @@ reportgenerator -reports:"Tests/TestResults/*/coverage.cobertura.xml" -targetdir
 - Commits cortos e imperativos. Nunca commitear secretos ni cadenas de conexión.
 - Versiones de paquetes NuGet centralizadas en `Directory.Packages.props`.
 
+## Reglas y skills del proyecto
+Los rules y skills del proyecto están documentados en la carpeta `project/`:
+- [`project/README.md`](project/README.md) — Reglascanónicas para el repositorio.
+- [`project/architecture.md`](project/architecture.md) — Capas, CQRS, Outbox, CPM.
+- [`project/conventions.md`](project/conventions.md) — Estilo de código, lenguaje de dominio, reglas de testing.
+- [`project/git-conventions.md`](project/git-conventions.md) — Nombrado de ramas, mensajes de commit, PRs.
+- [`project/git-workflow.md`](project/git-workflow.md) — Flujo de trabajo con worktrees y CI.
+- [`project/trunk-based-development.md`](project/trunk-based-development.md) — Modelo Trunk-Based Development, duración de ramas, flags.
+- [`project/code-rules.md`](project/code-rules.md) — Best practices C#/.NET y malas prácticas a evitar.
+
+*Skills created: [pending user addition — CI will be added later]*
+
 ## Documentación adicional
 
 - [Reglas del proyecto (arquitectura, convenciones, git)](project/README.md)

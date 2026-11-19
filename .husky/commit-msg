@@ -1,0 +1,20 @@
+@echo off
+setlocal
+
+:: Husky passes the commit message file path as the first argument
+set "COMMIT_MSG_FILE=%~1"
+
+:: Run commitlint to validate the commit message
+npx --no-install commitlint --from :%~1 --verbose 2>&1 || (
+    echo.
+    echo " Commitlint validation failed!"
+    echo "Commit message must follow Conventional Commits format:"
+    echo "  <type>(<scope>): <summary>"
+    echo "Types allowed: feat, fix, refactor, test, docs, chore, ci"
+    echo "Scope examples: paciente, plan-alimenticio, outbox, tests, ci, deps"
+    echo.
+    exit /b 1
+)
+
+echo "Commit message validated successfully."
+exit /b 0

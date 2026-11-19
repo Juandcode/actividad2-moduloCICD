@@ -46,6 +46,23 @@ for /f "tokens=*" %%f in ('git diff --cached --name-only -- "*.cs"') do (
 )
 
 echo.
+echo "Running commitlint validation..."
+
+:: Validate commit message with commitlint
+for /f %%m in ('git diff --cached --format=%s') do (
+    npx --no-install commitlint --from :%%m --verbose 2>&1 || (
+        echo.
+        echo " Commitlint validation failed!"
+        echo "Commit message must follow Conventional Commits format:"
+        echo "  <type>(<scope>): <summary>"
+        echo "Types allowed: feat, fix, refactor, test, docs, chore, ci"
+        echo "Scope examples: paciente, plan-alimenticio, outbox, tests, ci, deps"
+        echo.
+        exit /b 1
+    )
+)
+
+echo.
 echo "=== Validation complete ==="
 echo "If no warnings above, your commit can proceed."
 

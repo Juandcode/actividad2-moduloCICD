@@ -18,11 +18,11 @@ Format: `<type>/<short-name>`
 - Trunk-Based Development: branches are short-lived (**≤ 1–2 days**, merged back to `main`). There are no `develop/` or `release/*` branches.
 
 ## Commit messages
-
 Format (Conventional Commits, adapted):
 
 ```
 <type>(<scope>): <summary>
+```
 
 [optional body]
 ```
@@ -55,6 +55,7 @@ ci: publica reporte de cobertura aunque fallen los tests
 - Generic messages with no meaning (`formatted`, `cambios`, `wip`, `asdasd`). Commits like `formatted` are not accepted going forward — describe what was actually done.
 - Bypassing the husky `pre-commit` hook (`--no-verify`).
 - Committing secrets, connection strings, `.env`, `bin/`, `obj/`, `node_modules/`, `TestResults/`, `coveragereport/`.
+- **Commitlint**: los mensajes deben seguir el formato Conventional Commits; commitlint verificará el tipo y el alcance en cada push/PR a `main`. Si el mensaje no pasa el validado, el commit será rechazado y deberá reescrito según el formato `<type>(<scope>): <summary>`.
 
 ## Pull requests
 
