@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using GestionClinicaNutricional.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -11,11 +12,24 @@ namespace IntegrationTests.Setup
 {
 	public class WebApplicationFactory : WebApplicationFactory<Program>, IAsyncLifetime
 	{
-		private readonly string _dbName = $"IntTests_Item_{Guid.NewGuid()}";
+		private readonly string _dbName = $"IntTests_{Guid.NewGuid():N}";
 
-		private static string ConnectionString =>
-			Environment.GetEnvironmentVariable("TEST_DATABASE_CONNECTION")
-			?? "Server=localhost\\SQLEXPRESS;Database=ClinicaNutricional;MultipleActiveResultSets=True;Trusted_Connection=True;TrustServerCertificate=True";
+		private string ConnectionString
+		{
+			get
+			{
+				string baseConnection =
+					Environment.GetEnvironmentVariable("TEST_DATABASE_CONNECTION")
+					?? "Server=localhost\\SQLEXPRESS;Database=ClinicaNutricional;MultipleActiveResultSets=True;Trusted_Connection=True;TrustServerCertificate=True";
+
+				SqlConnectionStringBuilder builder = new(baseConnection)
+				{
+					InitialCatalog = _dbName,
+				};
+
+				return builder.ConnectionString;
+			}
+		}
 
 		protected override void ConfigureWebHost(Microsoft.AspNetCore.Hosting.IWebHostBuilder builder)
 		{
